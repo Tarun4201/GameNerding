@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameNerding.com - Tic-Tac-Toe</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Brant+Curvy:wght@400&display=swap');
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, purple, white);
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 3rem;
+            color: darkred;
+            font-family: 'Brant Curvy', cursive;
+        }
+
+        .tic-tac-toe {
+            display: inline-block;
+            margin: 20px auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+
+        td {
+            width: 100px;
+            height: 100px;
+            font-size: 3rem;
+            text-align: center;
+            vertical-align: middle;
+            border: 2px solid black;
+            cursor: pointer;
+            background-color: #f2f2f2;
+        }
+
+        td:hover {
+            background-color: #ddd;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            background-color: purple;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: white;
+            color: purple;
+        }
+
+        .history {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            display: inline-block;
+            text-align: left;
+            max-width: 700px;
+            margin-bottom: 50px;
+        }
+
+        .history h2 {
+            font-size: 2rem;
+            color: purple;
+        }
+
+        .history p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to GameNerding.com</h1>
+
+    <div class="tic-tac-toe">
+        <table id="gameBoard">
+            <tr>
+                <td id="cell-0" onclick="makeMove(0)"></td>
+                <td id="cell-1" onclick="makeMove(1)"></td>
+                <td id="cell-2" onclick="makeMove(2)"></td>
+            </tr>
+            <tr>
+                <td id="cell-3" onclick="makeMove(3)"></td>
+                <td id="cell-4" onclick="makeMove(4)"></td>
+                <td id="cell-5" onclick="makeMove(5)"></td>
+            </tr>
+            <tr>
+                <td id="cell-6" onclick="makeMove(6)"></td>
+                <td id="cell-7" onclick="makeMove(7)"></td>
+                <td id="cell-8" onclick="makeMove(8)"></td>
+            </tr>
+        </table>
+
+        <button onclick="resetGame()">Restart Game</button>
+    </div>
+
+    <!-- History Section Moved Below Table -->
+    <div class="history">
+        <h2>History of Tic-Tac-Toe</h2>
+        <p>
+            Tic-Tac-Toe is a classic game that has been played for centuries. It is believed to have originated from
+            the Roman Empire around the first century BC, where it was called "Terni Lapilli." The modern version
+            that we know today, where two players take turns marking X's and O's on a 3x3 grid, became popular in
+            the 19th and 20th centuries.
+        </p>
+        <p>
+            The game has been known by various names throughout history and across different cultures, but the simple
+            concept of placing markers in a row to win has remained the same. Tic-Tac-Toe is one of the first games
+            young children learn to play and has been digitized into video game versions across many platforms.
+        </p>
+    </div>
+
+    <script>
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+
+        const winConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        function makeMove(index) {
+            if (gameBoard[index] === '' && gameActive) {
+                gameBoard[index] = currentPlayer;
+                document.getElementById(`cell-${index}`).innerText = currentPlayer;
+                if (checkWin()) {
+                    setTimeout(() => alert(`Player ${currentPlayer} wins!`), 100);
+                    gameActive = false;
+                } else if (gameBoard.every(cell => cell !== '')) {
+                    setTimeout(() => alert('It\'s a tie!'), 100);
+                    gameActive = false;
+                } else {
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                }
+            }
+        }
+
+        function checkWin() {
+            return winConditions.some(condition => {
+                return condition.every(index => gameBoard[index] === currentPlayer);
+            });
+        }
+
+        function resetGame() {
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            document.querySelectorAll('td').forEach(cell => cell.innerText = '');
+            gameActive = true;
+            currentPlayer = 'X';
+        }
+    </script>
+
+</body>
+</html>
